@@ -70,6 +70,13 @@ function resetLog() {
 // the same segment/manifest URLs you'd see in the DevTools Network tab —
 // without needing to open it. Matches on ImageKit's HLS/DASH URL patterns
 // (rendition-prefixed .ts/.m4s segments, .m3u8/.mpd playlists).
+//
+// Current quality is also derived from these segment fetches — NOT from
+// `qualityLevels().selectedIndex`. Confirmed by direct testing that
+// selectedIndex can disagree with what's actually being downloaded for
+// extended periods (e.g. reporting "720p" while every segment fetched for
+// the next 50+ seconds is labeled 1080p). The segment filename is the one
+// unambiguous source of truth — it's literally the URL that got downloaded.
 let segmentObserver = null;
 
 function describeSegmentUrl(url) {
@@ -90,7 +97,14 @@ function describeSegmentUrl(url) {
   return filename;
 }
 
-function startSegmentLogging() {
+// Matches only actual segment files (e.g. "1080p-segs_00012.ts"), not
+// rendition playlists (e.g. "1080p-pl.m3u8") which share the same prefix.
+function segmentRendition(filename) {
+  const match = filename.match(/^(\d+p)-segs?_/);
+  return match ? match[1] : null;
+}
+
+function startSegmentLogging(onSegmentQuality) {
   if (segmentObserver) segmentObserver.disconnect();
 
   segmentObserver = new PerformanceObserver((list) => {
@@ -108,6 +122,10 @@ function startSegmentLogging() {
       const sizeKb = bytes ? (bytes / 1024).toFixed(1) + " KB" : "size unknown";
       const ms = entry.duration.toFixed(0) + "ms";
       logPanel(`fetched: ${describeSegmentUrl(entry.name)} (${sizeKb}, ${ms})`);
+
+      const filename = entry.name.split("?")[0].split("/").pop();
+      const rendition = segmentRendition(filename);
+      if (rendition) onSegmentQuality(rendition);
     });
   });
 
@@ -130,7 +148,23 @@ function createPlayer() {
     player.dispose();
   }
 
-  startSegmentLogging();
+  // currentQualityLabel is updated only from real segment fetches (see
+  // startSegmentLogging above) — read here so "playing" can announce
+  // quality in the simple log.
+  let currentQualityLabel = null;
+
+  function handleSegmentQuality(rendition) {
+    if (rendition === currentQualityLabel) return;
+    const isChange = currentQualityLabel !== null;
+    currentQualityLabel = rendition;
+    logQualityEl.textContent = "Quality: " + rendition;
+    if (isChange) {
+      logPanel("Quality changed → " + rendition, "log-quality");
+      logSimple("Quality changed to " + rendition, "log-quality");
+    }
+  }
+
+  startSegmentLogging(handleSegmentQuality);
 
   playerContainer.innerHTML =
     '<video id="video-player" class="video-js vjs-default-skin vjs-fluid" controls></video>';
@@ -140,11 +174,6 @@ function createPlayer() {
     { imagekitId: "Kashish12345" },
     { muted: true, preload: "auto" }
   );
-
-  // currentQualityLabel is set by the loadedmetadata/ABS handler below and
-  // read here so "playing" can announce quality in the simple log without
-  // the two handlers needing to fire in a specific order.
-  let currentQualityLabel = null;
 
   player.on("loadstart", () => logPanel("loadstart — fetching manifest/source"));
   player.on("canplay", () => logPanel("canplay — enough data buffered to start"));
@@ -168,51 +197,6 @@ function createPlayer() {
     const err = player.error();
     logPanel("ERROR — " + (err ? err.message : "unknown"), "log-error");
     logSimple("Something went wrong — playback couldn't continue", "log-error");
-  });
-
-  player.on("loadedmetadata", () => {
-    if (typeof player.qualityLevels !== "function") return;
-
-    const qualityLevels = player.qualityLevels();
-    if (qualityLevels.length === 0) return; // progressive MP4 — nothing to track
-
-    function describeLevel(level) {
-      if (!level) return "unknown";
-      const mbps = (level.bitrate / 1_000_000).toFixed(2);
-      return `${level.height}p (~${mbps} Mbps)`;
-    }
-
-    function updateCurrent() {
-      const level = qualityLevels[qualityLevels.selectedIndex];
-      currentQualityLabel = describeLevel(level);
-      logQualityEl.textContent = "Quality: " + currentQualityLabel;
-    }
-
-    updateCurrent();
-    logPanel(
-      "ABS active — " +
-        qualityLevels.length +
-        " renditions available, starting at " +
-        describeLevel(qualityLevels[qualityLevels.selectedIndex])
-    );
-
-    let lastIndex = qualityLevels.selectedIndex;
-    qualityLevels.on("change", () => {
-      if (qualityLevels.selectedIndex === lastIndex) return;
-      lastIndex = qualityLevels.selectedIndex;
-      const level = qualityLevels[lastIndex];
-      updateCurrent();
-      logPanel("ABS switched → " + describeLevel(level), "log-quality");
-      logSimple("Quality changed to " + describeLevel(level), "log-quality");
-    });
-
-    // Quality is switched entirely through the player's own native gear
-    // menu (built into the SDK). A separate custom control here previously
-    // mutated `level.enabled` directly, bypassing the native menu's own
-    // click handling — that desync was the root cause of the native menu
-    // showing two renditions checked at once. Removed; the native menu is
-    // now the only thing touching `.enabled`, and this handler purely
-    // observes and logs whatever it does.
   });
 
   window.player = player;
