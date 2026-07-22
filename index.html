@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ImageKit Stream Tester</title>
+
+    <!-- ImageKit Player CSS from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/@imagekit/video-player@1.0.0-beta.5/dist/styles.css" />
+
+    <!-- Poppins — ImageKit's brand font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="branding">
+        <h1>ImageKit Stream Tester</h1>
+      </div>
+      <p>
+        Enter an ImageKit video URL to test playback. Use an MP4 file for
+        progressive playback, or a transformed <code>.m3u8</code> /
+        <code>.mpd</code> manifest to test adaptive streaming. Powered by the
+        <a href="https://imagekit.io/docs/video-player/overview" target="_blank" rel="noopener">ImageKit Video Player SDK</a>.
+        See the
+        <a href="https://imagekit.io/docs/adaptive-bitrate-streaming" target="_blank" rel="noopener">Adaptive Bitrate Streaming documentation</a>
+        for how to generate an ABS manifest URL.
+      </p>
+    </header>
+
+    <section class="card controls-card">
+      <h2>Test Setup</h2>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>Video URL</span>
+          <input
+            id="video-url"
+            type="text"
+            placeholder="Paste an ImageKit video URL (.mp4, .m3u8, or .mpd)"
+          />
+        </label>
+
+        <label class="field">
+          <span>Poster URL</span>
+          <input
+            id="poster-url"
+            type="text"
+            placeholder="Optional poster image URL"
+          />
+        </label>
+      </div>
+
+      <label class="checkbox-field">
+        <input type="checkbox" id="subtitles-checkbox" />
+        <span>Generate AI subtitles for this video</span>
+      </label>
+
+      <div id="translations-field" class="translations-field" hidden>
+        <span>Also translate to</span>
+        <label class="checkbox-field inline">
+          <input type="checkbox" class="translation-checkbox" value="hi" />
+          <span>Hindi</span>
+        </label>
+        <label class="checkbox-field inline">
+          <input type="checkbox" class="translation-checkbox" value="es" />
+          <span>Spanish</span>
+        </label>
+        <label class="checkbox-field inline">
+          <input type="checkbox" class="translation-checkbox" value="fr" />
+          <span>French</span>
+        </label>
+        <label class="checkbox-field inline">
+          <input type="checkbox" class="translation-checkbox" value="de" />
+          <span>German</span>
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button id="apply-btn" type="button">Play</button>
+        <button id="reset-btn" type="button" class="button-secondary">Reset</button>
+      </div>
+    </section>
+
+    <div class="demo-layout">
+      <section class="player-wrapper">
+        <video id="video-player" class="video-js vjs-default-skin vjs-fluid" controls></video>
+      </section>
+
+      <div class="log-panel">
+        <div class="log-panel-head">
+          <h2>Player Log</h2>
+          <label class="tech-toggle">
+            <input type="checkbox" id="tech-toggle-checkbox" />
+            <span>Show technical details</span>
+          </label>
+        </div>
+        <div id="log-current-quality" class="log-current">Quality: —</div>
+        <div id="log-simple" class="log-lines"></div>
+        <div id="log-lines" class="log-lines log-technical" hidden></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>Built using the <a href="https://imagekit.io/docs/video-player/overview" target="_blank" rel="noopener">ImageKit Video Player SDK</a>.</p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

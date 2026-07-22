@@ -1,0 +1,322 @@
+/* ImageKit brand values, pulled live from imagekit.io:
+   primary blue rgb(4,80,213), heading/text rgb(26,32,44), font Poppins, 16px radius */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f7fb;
+  color: #1a202c;
+  font-family: "Poppins", sans-serif;
+  padding: 40px 20px;
+}
+
+.header {
+  max-width: 1300px;
+  margin: 0 auto 24px;
+}
+
+.branding h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a202c;
+  padding-left: 14px;
+  border-left: 4px solid #0450d5;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: #4a5568;
+  font-size: 14px;
+  padding-left: 18px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.header p a {
+  color: #0450d5;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.header p a:hover {
+  text-decoration: underline;
+}
+
+.header code {
+  background: rgba(4, 80, 213, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+
+.card {
+  max-width: 1300px;
+  margin: 0 auto 24px;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 20px rgba(29, 39, 54, 0.08);
+}
+
+.card h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.field input {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 12px;
+  border: 1px solid #dde2ea;
+  border-radius: 10px;
+  color: #1a202c;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #0450d5;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4a5568;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+
+.checkbox-field input {
+  width: 16px;
+  height: 16px;
+  accent-color: #0450d5;
+}
+
+.translations-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: -8px 0 18px 24px;
+  font-size: 13px;
+  color: #8a94a6;
+}
+
+.translations-field[hidden] {
+  display: none;
+}
+
+.checkbox-field.inline {
+  margin-bottom: 0;
+  color: #4a5568;
+}
+
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Scoped to our own controls only — an unscoped `button` selector here would
+   leak into Video.js's internal control-bar buttons (play, gear, fullscreen,
+   etc.) and break their native icon sizing/spacing. */
+.controls-card button {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #0450d5;
+  color: #ffffff;
+}
+
+.controls-card button.button-secondary {
+  background: #eef1f6;
+  color: #1a202c;
+}
+
+/* Side-by-side layout: player on the left, live log panel on the right */
+.demo-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.player-wrapper {
+  flex: 1 1 auto;
+  max-width: 1000px;
+  background: #000;
+  border: 1px solid #e5e9f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(29, 39, 54, 0.08);
+}
+
+.video-js {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.player-wrapper .ik-player-wrapper,
+.player-wrapper .ik-player-container,
+.player-wrapper .video-js {
+  width: 100% !important;
+}
+
+.player-wrapper .ik-player-container {
+  margin-bottom: 0 !important;
+}
+
+.log-panel {
+  flex: 0 0 300px;
+  min-width: 260px;
+  max-width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 16px;
+  padding: 18px;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  max-height: 560px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(29, 39, 54, 0.08);
+}
+
+.log-panel h2 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0450d5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.log-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tech-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #8a94a6;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tech-toggle input {
+  width: 13px;
+  height: 13px;
+  accent-color: #0450d5;
+}
+
+.log-technical {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #e5e9f0;
+}
+
+.log-technical[hidden] {
+  display: none;
+}
+
+.log-current {
+  background: rgba(4, 80, 213, 0.08);
+  border: 1px solid rgba(4, 80, 213, 0.18);
+  border-radius: 10px;
+  padding: 9px 12px;
+  margin-bottom: 12px;
+  color: #0450d5;
+  font-weight: 600;
+}
+
+
+.log-lines {
+  white-space: pre-wrap;
+  color: #4a5568;
+  line-height: 1.7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.log-lines div {
+  padding: 3px 0;
+  border-bottom: 1px solid #f1f3f7;
+}
+
+.log-lines div:last-child {
+  border-bottom: none;
+}
+
+.log-lines .log-quality {
+  color: #0450d5;
+  font-weight: 600;
+}
+
+.log-lines .log-error {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+
+@media (max-width: 900px) {
+  .demo-layout {
+    flex-direction: column;
+  }
+  .log-panel {
+    max-width: none;
+    width: 100%;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.site-footer {
+  max-width: 1300px;
+  margin: 32px auto 0;
+  text-align: center;
+  font-size: 13px;
+  color: #8a94a6;
+}
+
+.site-footer a {
+  color: #0450d5;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
