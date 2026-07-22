@@ -1,5 +1,7 @@
 # ImageKit Stream Tester
 
+**Live:** https://imagekit-stream-tester.netlify.app/
+
 A lightweight tool for testing video playback through the [ImageKit Video Player SDK](https://imagekit.io/docs/video-player/overview) — built as a replacement for third-party stream-testing tools (like Bitmovin's "Test Your Stream") during customer calls and demos.
 
 Paste any ImageKit video URL and test it live: a plain `.mp4` for progressive playback, or a transformed `.m3u8` / `.mpd` manifest to test adaptive bitrate streaming (ABS).
